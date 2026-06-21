@@ -215,3 +215,31 @@ select.modern-input { background-image: url("data:image/svg+xml;charset=UTF-8,%3
 
 .qc-detail { font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;}
 .qc-detail strong { color: var(--accent); font-weight: 500; width: 60px; }
+
+/* Status Badges Ext */
+.qc-status.noshow { background: rgba(255, 152, 0, 0.2); color: #FF9800; border-color: rgba(255, 152, 0, 0.3); }
+.qc-status.cancelled { background: rgba(158, 158, 158, 0.2); color: #9E9E9E; border-color: rgba(158, 158, 158, 0.3); }
+
+/* Queue Actions Buttons */
+.qc-actions {
+    display: flex; gap: 8px; margin-top: 10px; border-top: 1px dashed var(--border-color);
+    padding-top: 15px; flex-wrap: wrap; justify-content: flex-end;
+}
+.qc-btn {
+    border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem;
+    font-weight: 600; cursor: pointer; transition: var(--transition-smooth);
+    font-family: var(--font-family); display: inline-flex; align-items: center; gap: 4px;
+}
+.qc-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+.btn-checkin { background: #4CAF50; color: white; }
+.btn-checkin:hover { background: #43A047; }
+
+.btn-noshow { background: #FF9800; color: white; }
+.btn-noshow:hover { background: #F57C00; }
+
+.btn-cancel { background: #757575; color: white; }
+.btn-cancel:hover { background: #616161; }
+
+.btn-delete { background: #F44336; color: white; margin-left: auto; }
+.btn-delete:hover { background: #E53935; }

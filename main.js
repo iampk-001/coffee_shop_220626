@@ -267,8 +267,14 @@ async function fetchQueue() {
             card.className = 'queue-card';
             
             // Format status color and text
-            let statusClass = item.status === 'booked' ? '' : 'arrived';
-            let statusText = item.status === 'booked' ? 'จองแล้ว' : (item.status || 'รอดำเนินการ');
+            let statusClass = '';
+            let statusText = 'รอดำเนินการ';
+            switch(item.status) {
+                case 'booked': statusClass = ''; statusText = 'จองแล้ว'; break;
+                case 'arrived': statusClass = 'arrived'; statusText = 'เช็คอินแล้ว'; break;
+                case 'no_show': statusClass = 'noshow'; statusText = 'No-show'; break;
+                case 'cancelled': statusClass = 'cancelled'; statusText = 'ยกเลิกแล้ว'; break;
+            }
 
             // Format date nicely
             const dateObj = new Date(item.reservation_date);
@@ -288,6 +294,12 @@ async function fetchQueue() {
                 <div class="qc-detail">
                     <strong>👥 จำนวน:</strong> <span>${item.guest_count} ท่าน</span>
                 </div>
+                <div class="qc-actions">
+                    <button class="qc-btn btn-checkin" onclick="updateBookingStatus('${item.id}', 'arrived')">✅ เช็คอิน</button>
+                    <button class="qc-btn btn-noshow" onclick="updateBookingStatus('${item.id}', 'no_show')">⏱️ No-show</button>
+                    <button class="qc-btn btn-cancel" onclick="updateBookingStatus('${item.id}', 'cancelled')">❌ ยกเลิก</button>
+                    <button class="qc-btn btn-delete" onclick="deleteBooking('${item.id}')">🗑️ ลบ</button>
+                </div>
             `;
             queueDataList.appendChild(card);
         });
@@ -299,6 +311,56 @@ async function fetchQueue() {
         setQueueState('error');
     }
 }
+
+// Update Booking Status
+window.updateBookingStatus = async function(id, newStatus) {
+    if (!supabase) return;
+    
+    // Add simple confirmation for destructive actions
+    if (newStatus === 'cancelled' || newStatus === 'no_show') {
+        if (!confirm("ยืนยันการเปลี่ยนสถานะเป็น " + newStatus + " ใช่หรือไม่?")) return;
+    }
+
+    try {
+        const { error } = await supabase
+            .from('reservations')
+            .update({ status: newStatus })
+            .eq('id', id);
+
+        if (error) throw error;
+        
+        // Refresh after update
+        fetchQueue();
+    } catch (err) {
+        console.error("Update status error:", err);
+        alert("เกิดข้อผิดพลาดในการอัปเดตสถานะ: " + err.message);
+    }
+};
+
+// Delete Booking
+window.deleteBooking = async function(id) {
+    if (!supabase) return;
+
+    if (!confirm("⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้ถาวร? (แนะนำให้ใช้การยกเลิกแทนการลบ)")) {
+        return;
+    }
+
+    try {
+        const { error } = await supabase
+            .from('reservations')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+        
+        alert("✅ ลบข้อมูลสำเร็จ");
+        // Refresh after delete
+        fetchQueue();
+    } catch (err) {
+        console.error("Delete error:", err);
+        alert("เกิดข้อผิดพลาดในการลบข้อมูล: " + err.message);
+    }
+};
 
 // Call on load and on refresh button click
 if (refreshQueueBtn) {
