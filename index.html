@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brew & Brown - Table Reservation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Diagnostic tool to catch any hidden errors
+        window.onerror = function(msg, url, line) {
+            alert("⚠️ เจอ Error ซ่อนอยู่ครับ:\n" + msg + "\nที่บรรทัด: " + line + "\nรบกวนแคปจอนี้บอกผมหน่อยครับ");
+        };
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <button class="burger-btn" id="burgerBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="logo">Brew & Brown</div>
+            <div style="width: 24px;"></div>
+        </div>
+    </nav>
+
+    <!-- Settings Drawer -->
+    <div class="settings-drawer" id="settingsDrawer">
+        <div class="drawer-content">
+            <h3 data-i18n="settings">Settings</h3>
+            <div class="setting-group">
+                <label data-i18n="language">Language</label>
+                <div class="toggle-group">
+                    <button class="toggle-btn" id="btn-en">EN</button>
+                    <button class="toggle-btn active" id="btn-th">TH</button>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label data-i18n="theme">Theme</label>
+                <div class="toggle-group">
+                    <button class="toggle-btn active" id="btn-dark">Dark</button>
+                    <button class="toggle-btn" id="btn-light">Light</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 data-i18n="hero_title">จองโต๊ะล่วงหน้า รับประกันที่นั่งสุดชิล</h1>
+        </div>
+    </header>
+
+    <!-- Booking Form Section (Overlapping Card) -->
+    <main class="container">
+        <div class="booking-card-layout">
+            <h2 class="card-title" data-i18n="booking_title">จองโต๊ะของคุณ</h2>
+            <form id="reservationForm" class="reservation-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reservationDate" data-i18n="date_label">วันที่ *</label>
+                        <input type="date" id="reservationDate" class="modern-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="timeSlot" data-i18n="time_label">รอบเวลา *</label>
+                        <select id="timeSlot" class="modern-input" required>
+                            <option value="" disabled selected data-i18n="select_time">เลือกรอบเวลา</option>
+                            <option value="10:00 - 11:30">10:00 - 11:30 น.</option>
+                            <option value="11:30 - 13:00">11:30 - 13:00 น.</option>
+                            <option value="13:00 - 14:30">13:00 - 14:30 น.</option>
+                            <option value="14:30 - 16:00">14:30 - 16:00 น.</option>
+                            <option value="16:00 - 17:30">16:00 - 17:30 น.</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="guestsCount" data-i18n="guests_label">จำนวนคน *</label>
+                        <select id="guestsCount" class="modern-input" required>
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6+">6+</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerName" data-i18n="name_label">ชื่อ - นามสกุล *</label>
+                        <input type="text" id="customerName" class="modern-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone" data-i18n="phone_label">เบอร์โทรศัพท์ *</label>
+                        <input type="tel" id="customerPhone" class="modern-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerNote" data-i18n="note_label">หมายเหตุ / คำขอพิเศษ</label>
+                    <textarea id="customerNote" class="modern-input" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="primary-btn submit-btn" id="confirmBookingBtn" data-i18n="confirm_btn">ยืนยันการจองโต๊ะ</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Brew & Brown. All rights reserved.</p>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content success-modal">
+            <div class="success-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #4CAF50;">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h2 data-i18n="success_title">จองโต๊ะสำเร็จ!</h2>
+            
+            <div class="booking-receipt">
+                <p class="booking-id-text" data-i18n="booking_id">รหัสการจอง:</p>
+                <h3 class="booking-id" id="displayBookingId">#BB-0000</h3>
+                <div class="booking-details">
+                    <p><strong data-i18n="name_label">ชื่อ:</strong> <span id="displayCustomerName"></span></p>
+                    <p><strong data-i18n="phone_label">เบอร์โทร:</strong> <span id="displayCustomerPhone"></span></p>
+                    <p><strong data-i18n="date_label">วันที่:</strong> <span id="displayDate"></span></p>
+                    <p><strong data-i18n="time_label">เวลา:</strong> <span id="displayTime"></span></p>
+                    <p><strong data-i18n="guests_label">จำนวน:</strong> <span id="displayGuests"></span></p>
+                </div>
+            </div>
+
+            <p class="warning-text">📸 <span data-i18n="screenshot_warning">กรุณาแคปหน้าจอนี้เพื่อแสดงต่อพนักงานเมื่อมาถึงร้าน</span></p>
+            <button class="primary-btn close-success-btn" id="closeSuccessModal" data-i18n="back_home">กลับสู่หน้าหลัก</button>
+        </div>
+    </div>
+
+    <!-- Supabase JS Local -->
+    <script src="supabase.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

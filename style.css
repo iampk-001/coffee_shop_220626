@@ -1,0 +1,168 @@
+:root {
+    --font-family: 'Outfit', 'Prompt', sans-serif;
+    
+    /* Dark Mode (Default) */
+    --bg-main: #2C241E;
+    --bg-card: rgba(44, 36, 30, 0.9);
+    --accent: #8C5C38;
+    --accent-hover: #A6734B;
+    --text-primary: #FDFBF7;
+    --text-secondary: #D3C5B5;
+    --border-color: rgba(140, 92, 56, 0.3);
+    --input-bg: rgba(26, 18, 11, 0.5);
+    --nav-bg: rgba(44, 36, 30, 0.85);
+    --shadow-soft: 0 15px 35px rgba(0,0,0,0.4);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body.light-mode {
+    /* Light Mode */
+    --bg-main: #FDFBF7;
+    --bg-card: #FFFFFF;
+    --accent: #8C5C38;
+    --accent-hover: #70472A;
+    --text-primary: #2C241E;
+    --text-secondary: #5C4B40;
+    --border-color: rgba(140, 92, 56, 0.2);
+    --input-bg: #F5EBE1;
+    --nav-bg: rgba(253, 251, 247, 0.9);
+    --shadow-soft: 0 15px 35px rgba(140, 92, 56, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex; flex-direction: column; min-height: 100vh;
+}
+
+.container { max-width: 800px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+/* Navbar */
+.navbar {
+    position: fixed; top: 0; left: 0; width: 100%; padding: 15px 0;
+    background: var(--nav-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color); z-index: 1000; transition: var(--transition-smooth);
+}
+.nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.burger-btn { background: transparent; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; transition: var(--transition-smooth); }
+.burger-btn:hover { color: var(--accent); }
+.logo { font-size: 1.8rem; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; }
+
+/* Settings Drawer */
+.settings-drawer {
+    position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+    background: var(--bg-card); border-right: 1px solid var(--border-color);
+    z-index: 2001; transition: left 0.3s ease; padding: 20px;
+}
+.settings-drawer.open { left: 0; }
+.drawer-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 2000; display: none; opacity: 0; transition: opacity 0.3s ease;
+}
+.drawer-overlay.active { display: block; opacity: 1; }
+.drawer-content h3 { margin-bottom: 20px; color: var(--accent); font-size: 1.5rem;}
+.setting-group { margin-bottom: 20px; }
+.setting-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-secondary); }
+.toggle-group { display: flex; gap: 10px; }
+.toggle-btn {
+    flex: 1; padding: 8px; background: transparent; border: 1px solid var(--border-color);
+    color: var(--text-primary); border-radius: 8px; cursor: pointer; transition: var(--transition-smooth);
+}
+.toggle-btn.active { background: var(--accent); color: #FFF; border-color: var(--accent); font-weight: 600; }
+
+/* Hero Section */
+.hero {
+    position: relative; height: 50vh; min-height: 400px;
+    background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200');
+    background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center;
+}
+.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 36, 30, 0.6); transition: var(--transition-smooth); }
+body.light-mode .hero-overlay { background: rgba(44, 36, 30, 0.3); }
+
+.hero-content { position: relative; z-index: 1; max-width: 800px; padding: 0 20px; margin-top: 40px; }
+.hero-content h1 {
+    font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 600; color: #FDFBF7;
+    line-height: 1.3; text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+
+/* Booking Card Layout */
+.booking-card-layout {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px;
+    padding: 40px; margin-top: -80px; position: relative; z-index: 10;
+    box-shadow: var(--shadow-soft); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    margin-bottom: 60px; transition: var(--transition-smooth);
+}
+
+.card-title { font-size: 2rem; color: var(--accent); margin-bottom: 30px; text-align: center; font-weight: 600; }
+
+/* Form Elements */
+.reservation-form { display: flex; flex-direction: column; gap: 20px; }
+.form-row { display: flex; gap: 20px; }
+.form-group { flex: 1; display: flex; flex-direction: column; gap: 8px;}
+.form-group label { font-size: 0.95rem; color: var(--text-secondary); font-weight: 500;}
+
+.modern-input {
+    width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--border-color);
+    color: var(--text-primary); border-radius: 12px; font-family: var(--font-family); font-size: 1rem;
+    outline: none; transition: var(--transition-smooth); appearance: none;
+}
+.modern-input:focus, .modern-input:hover { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(140, 92, 56, 0.1); }
+select.modern-input { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C5C38' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 1em; padding-right: 40px; cursor: pointer; }
+
+/* Primary Button */
+.primary-btn {
+    background-color: var(--accent); color: #FFF; font-family: var(--font-family);
+    font-size: 1.1rem; font-weight: 600; padding: 16px 35px; border: none; border-radius: 12px;
+    cursor: pointer; transition: var(--transition-smooth); box-shadow: 0 4px 15px rgba(140, 92, 56, 0.3);
+}
+.primary-btn:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(140, 92, 56, 0.4); }
+.submit-btn { margin-top: 10px; width: 100%; font-size: 1.2rem; }
+
+/* Footer */
+.footer { text-align: center; padding: 30px; color: var(--text-secondary); margin-top: auto; font-size: 0.9rem;}
+
+/* Modal */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center;
+    z-index: 2000; opacity: 0; pointer-events: none; transition: var(--transition-smooth);
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+
+.modal-content {
+    background: var(--bg-card); border: 1px solid var(--accent); border-radius: 20px;
+    width: 90%; max-width: 500px; padding: 40px; transform: translateY(20px);
+    transition: var(--transition-smooth); box-shadow: var(--shadow-soft); text-align: center;
+}
+.modal-overlay.active .modal-content { transform: translateY(0); }
+
+.success-icon { margin-bottom: 20px; }
+.modal-content h2 { color: var(--accent); font-size: 1.8rem; margin-bottom: 20px; }
+
+.booking-receipt {
+    background: var(--input-bg); border-radius: 12px; padding: 25px; margin-bottom: 25px;
+    border: 1px dashed var(--accent); text-align: left;
+}
+.booking-id-text { font-size: 0.9rem; color: var(--text-secondary); text-align: center; }
+.booking-id { font-size: 2.2rem; color: var(--text-primary); text-align: center; margin-bottom: 20px; letter-spacing: 1px;}
+
+.booking-details p { margin-bottom: 8px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;}
+.booking-details p:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+.booking-details strong { color: var(--accent); display: inline-block; width: 80px;}
+
+.warning-text { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.4; }
+.close-success-btn { width: 100%; }
+
+@media (max-width: 600px) {
+    .booking-card-layout { padding: 25px; margin-top: -40px; }
+    .form-row { flex-direction: column; gap: 15px; }
+    .modal-content { padding: 30px 20px; }
+    .booking-id { font-size: 1.8rem; }
+}
