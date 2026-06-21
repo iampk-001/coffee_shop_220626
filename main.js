@@ -194,6 +194,11 @@ reservationForm.addEventListener('submit', async (e) => {
         document.getElementById('displayGuests').textContent = guests;
 
         successModal.classList.add('active');
+        
+        // Refresh the queue table immediately!
+        if (typeof fetchQueue === 'function') {
+            fetchQueue();
+        }
     } catch (error) {
         console.error("Booking Error:", error);
         alert(currentLang === 'en' ? "Failed to book table: " + error.message : "เกิดข้อผิดพลาดในการจองโต๊ะ: " + error.message);
@@ -211,4 +216,102 @@ closeSuccessModal.addEventListener('click', () => {
 
 } catch (globalError) {
     alert("🔥 MAIN.JS CRASHED:\n" + globalError.message + "\n\n" + globalError.stack);
+}
+
+// ==========================================
+// Queue Display Logic
+// ==========================================
+const queueLoading = document.getElementById('queueLoading');
+const queueEmpty = document.getElementById('queueEmpty');
+const queueError = document.getElementById('queueError');
+const queueErrorMsg = document.getElementById('queueErrorMsg');
+const queueDataList = document.getElementById('queueDataList');
+const refreshQueueBtn = document.getElementById('refreshQueueBtn');
+
+function setQueueState(state) {
+    queueLoading.classList.remove('active');
+    queueEmpty.classList.remove('active');
+    queueError.classList.remove('active');
+    queueDataList.style.display = 'none';
+
+    if (state === 'loading') queueLoading.classList.add('active');
+    if (state === 'empty') queueEmpty.classList.add('active');
+    if (state === 'error') queueError.classList.add('active');
+    if (state === 'data') queueDataList.style.display = 'grid';
+}
+
+async function fetchQueue() {
+    setQueueState('loading');
+    
+    if (!supabase) {
+        queueErrorMsg.textContent = 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้';
+        setQueueState('error');
+        return;
+    }
+
+    try {
+        // Fetch reservations, ordered by date and time
+        const { data, error } = await supabase
+            .from('reservations')
+            .select('*')
+            .order('reservation_date', { ascending: true })
+            .order('time_slot', { ascending: true });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            setQueueState('empty');
+            return;
+        }
+
+        // Render Data
+        queueDataList.innerHTML = '';
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'queue-card';
+            
+            // Format status color and text
+            let statusClass = item.status === 'booked' ? '' : 'arrived';
+            let statusText = item.status === 'booked' ? 'จองแล้ว' : (item.status || 'รอดำเนินการ');
+
+            // Format date nicely
+            const dateObj = new Date(item.reservation_date);
+            const dateStr = dateObj.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+
+            card.innerHTML = `
+                <div class="qc-header">
+                    <span class="qc-name">👤 ${item.customer_name}</span>
+                    <span class="qc-status ${statusClass}">${statusText}</span>
+                </div>
+                <div class="qc-detail">
+                    <strong>📅 วันที่:</strong> <span>${dateStr}</span>
+                </div>
+                <div class="qc-detail">
+                    <strong>⏰ เวลา:</strong> <span>${item.time_slot}</span>
+                </div>
+                <div class="qc-detail">
+                    <strong>👥 จำนวน:</strong> <span>${item.guest_count} ท่าน</span>
+                </div>
+            `;
+            queueDataList.appendChild(card);
+        });
+
+        setQueueState('data');
+    } catch (err) {
+        console.error("Queue fetch error:", err);
+        queueErrorMsg.textContent = err.message;
+        setQueueState('error');
+    }
+}
+
+// Call on load and on refresh button click
+if (refreshQueueBtn) {
+    refreshQueueBtn.addEventListener('click', fetchQueue);
+}
+
+// Initial Fetch
+document.addEventListener('DOMContentLoaded', fetchQueue);
+// Also fetch immediately in case DOM is already loaded
+if(document.readyState !== 'loading') {
+    fetchQueue();
 }

@@ -119,6 +119,35 @@
         </div>
     </main>
 
+    <!-- Queue Display Section -->
+    <section class="container queue-section" id="queueSection">
+        <div class="booking-card-layout">
+            <h2 class="card-title" data-i18n="queue_title" style="display: flex; justify-content: space-between; align-items: center;">
+                รายการคิวที่จองไว้
+                <button id="refreshQueueBtn" class="refresh-btn">🔄 อัปเดต</button>
+            </h2>
+            <div id="queueStateContainer" class="queue-state-container">
+                <!-- Loading State -->
+                <div id="queueLoading" class="queue-state active">
+                    <div class="spinner"></div>
+                    <p>กำลังโหลดข้อมูล...</p>
+                </div>
+                <!-- Empty State -->
+                <div id="queueEmpty" class="queue-state">
+                    <p>📭 ยังไม่มีข้อมูลการจองในขณะนี้</p>
+                </div>
+                <!-- Error State -->
+                <div id="queueError" class="queue-state error-state">
+                    <p>❌ ไม่สามารถดึงข้อมูลได้: <span id="queueErrorMsg"></span></p>
+                </div>
+                <!-- Data List -->
+                <div id="queueDataList" class="queue-data-list">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2026 Brew & Brown. All rights reserved.</p>
