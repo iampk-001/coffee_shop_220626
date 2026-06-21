@@ -214,10 +214,6 @@ closeSuccessModal.addEventListener('click', () => {
     dateInput.value = today;
 });
 
-} catch (globalError) {
-    alert("🔥 MAIN.JS CRASHED:\n" + globalError.message + "\n\n" + globalError.stack);
-}
-
 // ==========================================
 // Queue Display Logic
 // ==========================================
@@ -314,4 +310,8 @@ document.addEventListener('DOMContentLoaded', fetchQueue);
 // Also fetch immediately in case DOM is already loaded
 if(document.readyState !== 'loading') {
     fetchQueue();
+}
+
+} catch (globalError) {
+    alert("🔥 MAIN.JS CRASHED:\n" + globalError.message + "\n\n" + globalError.stack);
 }
